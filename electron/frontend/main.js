@@ -35,39 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
     ],
   })
 
-  function createNodeEventListener() {
-    instance.on('dbltap', (event) => {
-      if (event.target == instance) {
-        event.cy.add({
-          data: { id: String(counter++) },
-          position: { x: event.position.x, y: event.position.y },
-        })
-      }
-    })
-  }
+  let node = null
 
-  createNodeEventListener()
+  instance.on('tap', (event) => {
+    if (event.target == instance) {
+      event.cy.add({
+        data: { id: String(counter++) },
+        position: { x: event.position.x, y: event.position.y },
+      })
+    }
+  })
 
-  function joinNodesEventListener() {
-    let node = null
-    
-    instance.on('dbltap', 'node', (event) => {
-      if (node == null) {
-        node = event.target
-        node.addClass('selected')
-        return
-      }
+  instance.on('tap', 'node', (event) => {
+    if (node === null) {
+      node = event.target
+      node.addClass('selected')
+      return
+    }
 
-      if (node == event.target) {
-        node.removeClass('selected')
-        node = null
-        return
-      }
-    })
-
-    instance.on('tap', 'node', (event) => {
-      if (node === null) return
-
+    try {
       instance.add({
         data: {
           id: `${node.id()}${event.target.id()}`,
@@ -75,9 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
           target: event.target.id(),
         },
       })
-      node.removeClass('selected')
-      node = null
-    })
-  }
-  joinNodesEventListener()
+    } catch (e) {}
+
+    node.removeClass('selected')
+    node = null
+  })
+
+  instance.on('dbltap', 'node', (event) => {
+
+    // instance.remove(event.target)
+  })
+
+  instance.on('tap', 'edge', (event) => {
+    instance.remove(event.target)
+  })
 })
