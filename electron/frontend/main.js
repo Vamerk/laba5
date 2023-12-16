@@ -15,6 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       },
       {
+        selector: '.selected',
+        style: {
+          'border-width': 2,
+          'border-color': 'red',
+          'border-style': 'solid',
+        },
+      },
+      {
         selector: 'edge',
         style: {
           width: 3,
@@ -29,13 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function createNodeEventListener() {
     instance.on('dbltap', (event) => {
-        if (event.target == instance) {
-          event.cy.add({
-            data: { id: String(counter++) },
-            position: { x: event.position.x, y: event.position.y },
-          })
-        }
-      })
+      if (event.target == instance) {
+        event.cy.add({
+          data: { id: String(counter++) },
+          position: { x: event.position.x, y: event.position.y },
+        })
+      }
+    })
   }
 
   createNodeEventListener()
@@ -43,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function joinNodesEventListener() {
     let node = null
     instance.on('dbltap', 'node', (event) => {
-      console.log(selectedNode)
-
       if (node === null) {
         node = event.target
+        node.addClass('selected')
+        return
       }
     })
   }
