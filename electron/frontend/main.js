@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       },
       {
-        selector: ".selected",
+        selector: "node.selected",
         style: {
           "border-width": 2,
           "border-color": "red",
@@ -36,28 +36,33 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   });
 
-  function createNodeEventListener() {
-    instance.on("dbltap", (event) => {
-      if (event.target == instance) {
-        event.cy.add({
-          data: { id: String(counter++) },
-          position: { x: event.position.x, y: event.position.y },
-        });
-      }
-    });
-  }
+  let node = null;
 
-  createNodeEventListener();
+  instance.on("dbltap", "node", (event) => {
+    if (node == null) {
+      node = event.target;
+      node.addClass("selected");
+      return;
+    }
 
-  function joinNodesEventListener() {
-    let node = null;
-    instance.on("dbltap", "node", (event) => {
-      if (node === null) {
-        node = event.target;
-        node.addClass("selected");
-        return;
-      }
+    if (node == event.target) {
+      node.removeClass("selected");
+      node = null;
+      return;
+    }
+  });
+
+  instance.on("tap", "node", (event) => {
+    if (node === null) return;
+
+    instance.add({
+      data: {
+        id: `${node.id()}${event.target.id()}`,
+        source: node.id(),
+        target: event.target.id(),
+      },
     });
-  }
-  joinNodesEventListener();
+    node.removeClass("selected");
+    node = null;
+  });
 });
