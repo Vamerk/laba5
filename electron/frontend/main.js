@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     style: [
       {
         selector: 'node',
+
         style: {
           'background-color': '#666',
           label: 'data(id)',
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   instance.on('dbltap', 'node', (event) => {
     instance.filter((element, index, collection) => {
-      if (element.group() == "edges") {
+      if (element.group() == 'edges') {
       }
     })
   })

@@ -8,8 +8,37 @@ body {
   margin: 0;
 }
 
+/* w-full flex flex-row */
+.conteiner {
+  display: flex;
+  width: 100%;
+}
 #app {
-  width: 100vw;
   height: 100vh;
+  flex-grow: 1;
   overflow: hidden;
+}
+
+.side-content {
+  width: 24rem;
+  background-color: rgb(79 70 229);
+}
+
+.clearField {
+  display: block;
+  margin: 20px auto;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border-width: 2px;
+  background-color: #fff;
+  font-size: 1.5rem;
+  transition: 0.5s;
+
+  color: #4f46e5;
+}
+.clearField:hover {
+  color: #ffffff;
+  background-color: #4f46e5;
+  transform: translateY(-3px);
+  border: 2px solid white;
 }
