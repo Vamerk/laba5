@@ -1,0 +1,15 @@
+{
+  "name": "graphs-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "set NODE_ENV=production && electron ./src/index.js",
+    "dev": "set NODE_ENV=develop && electron ./src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  }
+}
