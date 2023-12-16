@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       instance.add({
         data: {
-          id: `${node.id()}${event.target.id()}`,
+          id: `${node.id()}-${event.target.id()}`,
           source: node.id(),
           target: event.target.id(),
         },
@@ -68,8 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   instance.on('dbltap', 'node', (event) => {
-
-    // instance.remove(event.target)
+    instance.filter((element, index, collection) => {
+      if (element.group() == "edges") {
+      }
+    })
   })
 
   instance.on('tap', 'edge', (event) => {
