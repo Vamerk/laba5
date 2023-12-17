@@ -139,6 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = JSON.parse(await electron.ipcRenderer.invoke('adjacency-matrix', jsonData))
     showTable('Матрица смежности', result)
   })
+
+  const incidenceMatrixButton = document.getElementById('incidence-matrix')
+  incidenceMatrixButton.addEventListener('click', async () => {
+    const jsonData = JSON.stringify({
+      data: instance
+        .edges()
+        .map((edge) => [parseInt(edge.data('source')), parseInt(edge.data('target'))]),
+      count: instance.nodes().length,
+    })
+
+    const result = JSON.parse(await electron.ipcRenderer.invoke('incidence-matrix', jsonData))
+    showTable('Матрица инциндентности', result)
+  })
 })
 
 function showTable(title, data) {
