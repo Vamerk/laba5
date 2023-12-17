@@ -30,18 +30,13 @@ async function init() {
   })
 
   ipcMain.on('adjacency-matrix', (event, data) => {
-    program = spawn('./cpp/test.exe')
+    const program = spawn('D:/Workspace/laba5/algoritms/adjacent_matrix/x64/Debug/adjacent_matrix.exe')
+    console.log(data)
+    program.stdin.write(data)
+    program.stdin.end()
 
     program.stdout.on('data', (data) => {
       console.log(`Recieved from C++: ${data}`)
-    })
-
-    program.stderr.on('data', (data) => {
-      console.error(`Error C++: ${data}`)
-    })
-
-    program.on('close', (code) => {
-      console.log(`C++ exited with ${code}`)
     })
   })
 }

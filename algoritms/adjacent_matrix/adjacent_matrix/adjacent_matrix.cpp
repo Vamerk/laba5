@@ -1,69 +1,63 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <nlohmann/json.hpp>
 
-const int MAX_VERTICES = 100; // Максимальное количество вершин в графе
+using namespace std;
+using json = nlohmann::json;
 
-void createAdjacencyMatrix(int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES], const std::pair<int, int> edges[], int numEdges) {
-    // Инициализируем матрицу смежности нулями
-    for (int i = 0; i < MAX_VERTICES; ++i) {
-        for (int j = 0; j < MAX_VERTICES; ++j) {
-            adjacencyMatrix[i][j] = 0;
+vector<vector<int>> createAdjacencyMatrix(vector<pair<int, int>> edges, const int count) {
+    vector<vector<int>> matrix;
+
+    for (int i = 0; i < count; i++) {
+        vector<int> row;
+        for (int j = 0; j < count; j++) {
+            row.push_back(0);
         }
+
+        matrix.push_back(row);
     }
 
-    // Заполняем матрицу смежности на основе массива смежных пар вершин
-    for (int i = 0; i < numEdges; ++i) {
+    for (int i = 0; i < edges.size(); ++i) {
         int vertex1 = edges[i].first;
         int vertex2 = edges[i].second;
-        adjacencyMatrix[vertex1][vertex2] = 1;
-        adjacencyMatrix[vertex2][vertex1] = 1; // для неориентированного графа
+        matrix[vertex1][vertex2] = 1;
+        matrix[vertex2][vertex1] = 1;
     }
+
+    return matrix;
 }
 
-std::string adjacencyMatrixToJsonString(int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES]) {
-    std::stringstream ss;
-    ss << "{";
+std::vector<std::pair<int, int>> parseDataFromJSON(std::string jsonString) {
+    json jsonData = json::parse(jsonString);
 
-    for (int i = 0; i < MAX_VERTICES; ++i) {
-        ss << "\"" << i << "\": [";
-        for (int j = 0; j < MAX_VERTICES; ++j) {
-            ss << adjacencyMatrix[i][j];
-            if (j < MAX_VERTICES - 1) {
-                ss << ", ";
-            }
-        }
-        ss << "]";
-        if (i < MAX_VERTICES - 1) {
-            ss << ", ";
-        }
+    std::vector<std::pair<int, int>> data;
+    for (const auto& row : jsonData["data"]) {
+        data.push_back({ row[0], row[1] });
     }
 
-    ss << "}";
-    return ss.str();
+    return data;
+}
+
+int parseCountFromJSON(string jsonString) {
+    json jsonData = json::parse(jsonString);
+    int result = jsonData["count"];
+
+    return result;
 }
 
 int main() {
-    int adjacencyMatrix[MAX_VERTICES][MAX_VERTICES];
-    std::pair<int, int> edges[] = { {0, 1}, {1, 2}, {2, 3}, {3, 0}, {1, 3} }; // Пример массива смежных пар
+    string inputJsonString;
+    getline(cin, inputJsonString);
 
-    int numEdges = sizeof(edges) / sizeof(edges[0]);
+    // std::vector<std::pair<int, int>> data = parseDataFromJSON("{ \"data\": [[0, 1], [1, 0], [1, 2]], \"count\": 3 }");
+    // int count = parseCountFromJSON("{ \"data\": [[0, 1], [1, 0], [1, 2]], \"count\": 3 }");
 
-    createAdjacencyMatrix(adjacencyMatrix, edges, numEdges);
+    std::vector<std::pair<int, int>> data = parseDataFromJSON(inputJsonString);
+    int count = parseCountFromJSON(inputJsonString);
 
-    // Выводим JSON-строку в файл
-    std::string jsonString = adjacencyMatrixToJsonString(adjacencyMatrix);
-
-    std::ofstream outputFile("output.json");
-    if (outputFile.is_open()) {
-        outputFile << jsonString;
-        outputFile.close();
-    }
-    else {
-
-        return 1;
-    }
-
-    return 0;
+    vector<vector<int>> matrix = createAdjacencyMatrix(data, count);
+    json result = matrix;
+    cout << result;
 }
