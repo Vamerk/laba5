@@ -133,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof weight !== 'number' || Number.isNaN(weight)) throw new Error()
 
       event.target.data('weight', weight)
-    } catch (e) {
-    }
+    } catch (e) {}
   })
 
   instance.on('dbltap', 'edge', (event) => {
@@ -165,5 +164,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const result = JSON.parse(await electron.ipcRenderer.invoke('incidence-matrix', jsonData))
     createTable('Матрица инциндентности', result)
+  })
+
+  const weightedMatrixButton = document.getElementById('weighted-matrix')
+  weightedMatrixButton.addEventListener('click', async () => {
+    const edges = []
+    const weights = []
+
+    instance.edges().forEach((edge) => {
+      edges.push([parseInt(edge.data('source')), parseInt(edge.data('target'))])
+      weights.push(parseInt(edge.data('weight')))
+    })
+
+    const jsonData = JSON.stringify({
+      weights,
+      data: edges,
+      count: instance.nodes().length,
+    })
+
+    console.log(jsonData)
+
+    const result = JSON.parse(await electron.ipcRenderer.invoke('weighted-matrix', jsonData))
+    createTable('Весовая матрица', result)
   })
 })
