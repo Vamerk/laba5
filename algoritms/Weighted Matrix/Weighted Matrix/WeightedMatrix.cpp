@@ -30,9 +30,9 @@ vector<vector<int>> createWeightedMatrix(vector<pair<int, int>>edges, const std:
         matrix[vertex2][vertex1] = weight;
     }
 
-    //for (int i = 0; i < count; ++i) {
-    //    matrix[i][i] = 0;
-    //}
+    for (int i = 0; i < count; ++i) {
+        matrix[i][i] = 0;
+    }
     return matrix;
 }
 
@@ -60,14 +60,16 @@ std::vector<int> parseWeightFromJSON(string jsonString) {
 
     std::vector<int> weight;
     for (const auto& row : jsonData["weights"]) {
-        weight.push_back({ row[0] });
+        weight.push_back(row);
     }
 
     return weight;
 }
 
 int main() {
-    /* { "data": [[0, 1], [1, 0], [1, 2]],  "weights" : [10, 20, 40], "count" : 3 } */ 
+    /* 
+    { "data": [[0, 1], [1, 0], [1, 2]],  "weights" : [10, 20, 40], "count" : 3 } 
+    */ 
     string inputJsonString;
     getline(cin, inputJsonString);
 
