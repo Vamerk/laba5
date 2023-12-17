@@ -64,6 +64,7 @@ button.menu__item:hover {
 
 #output table caption {
   font-size: 0.875rem;
+  cursor: pointer;
 }
 
 #output table th {
@@ -75,4 +76,28 @@ button.menu__item:hover {
   text-align: center;
   min-width: 2rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.prompt {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.prompt input {
+  outline: none;
+  border: none;
+  padding: 0.25rem 0.5rem;
+}
+
+.prompt button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
 }

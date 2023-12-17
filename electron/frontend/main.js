@@ -1,5 +1,6 @@
 import './style.css'
 import cytoscape from 'cytoscape'
+import { createTable, inputPrompt } from './utils'
 
 let counter = 0
 
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         selector: 'edge',
         style: {
           width: 3,
+          label: 'data(weight)',
           'line-color': '#ccc',
           'curve-style': 'bezier',
           'target-arrow-color': '#ccc',
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: `${node.id()}-${event.target.id()}`,
           source: node.id(),
           target: event.target.id(),
+          weight: 1,
         },
       })
     } catch (e) {}
@@ -112,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: `${source}-${target}`,
           source,
           target,
+          weight: edge.data('weight'),
         },
       })
     })
@@ -123,7 +127,17 @@ document.addEventListener('DOMContentLoaded', () => {
     counter = localCounter
   })
 
-  instance.on('tap', 'edge', (event) => {
+  instance.on('onetap', 'edge', async (event) => {
+    try {
+      const weight = parseInt(await inputPrompt('Введите вес ребра'))
+      if (typeof weight !== 'number' || Number.isNaN(weight)) throw new Error()
+
+      event.target.data('weight', weight)
+    } catch (e) {
+    }
+  })
+
+  instance.on('dbltap', 'edge', (event) => {
     instance.remove(event.target)
   })
 
@@ -137,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     const result = JSON.parse(await electron.ipcRenderer.invoke('adjacency-matrix', jsonData))
-    showTable('Матрица смежности', result)
+    createTable('Матрица смежности', result)
   })
 
   const incidenceMatrixButton = document.getElementById('incidence-matrix')
@@ -150,41 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     const result = JSON.parse(await electron.ipcRenderer.invoke('incidence-matrix', jsonData))
-    showTable('Матрица инциндентности', result)
+    createTable('Матрица инциндентности', result)
   })
 })
-
-function showTable(title, data) {
-  const table = document.createElement('table')
-  const tableCaption = table.createCaption()
-  const tableHead = table.createTHead()
-  const tableBody = table.createTBody()
-
-  tableCaption.appendChild(document.createTextNode(title))
-
-  const headerRow = document.createElement('tr')
-  headerRow.appendChild(document.createElement('td'))
-  for (let i = 0; i < data.length; i++) {
-    const th = document.createElement('th')
-    th.appendChild(document.createTextNode(String(i)))
-    headerRow.appendChild(th)
-  }
-  tableHead.appendChild(headerRow)
-
-  for (let i = 0; i < data.length; i++) {
-    const tr = document.createElement('tr')
-    const th = document.createElement('th')
-    th.appendChild(document.createTextNode(String(i)))
-    tr.appendChild(th)
-
-    for (let j = 0; j < data[i].length; j++) {
-      const td = document.createElement('td')
-      td.appendChild(document.createTextNode(String(data[i][j])))
-      tr.appendChild(td)
-    }
-
-    tableBody.appendChild(tr)
-  }
-
-  document.getElementById('output').appendChild(table)
-}
