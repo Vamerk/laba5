@@ -11,5 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "ffi-napi": "^4.0.3",
+    "node-addon-api": "^7.0.0"
   }
 }

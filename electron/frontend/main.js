@@ -39,11 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let node = null
 
   instance.on('tap', (event) => {
-    if (event.target == instance) {
-      event.cy.add({
-        data: { id: String(counter++) },
-        position: { x: event.position.x, y: event.position.y },
-      })
+    if (event.target === instance) {
+      if (node === null) {
+        event.cy.add({
+          data: { id: String(counter++) },
+          position: { x: event.position.x, y: event.position.y },
+        })
+        return
+      }
+
+      node.removeClass('selected')
+      node = null
     }
   })
 
@@ -69,10 +75,15 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   instance.on('dbltap', 'node', (event) => {
-    instance.filter((element, index, collection) => {
-      if (element.group() == 'edges') {
-      }
+    const result = instance.filter((element) => {
+      return (
+        element.group() === 'edges' &&
+        (element.source() === event.target || element.target() == event.target)
+      )
     })
+
+    instance.remove(result)
+    instance.remove(event.target)
   })
 
   instance.on('tap', 'edge', (event) => {

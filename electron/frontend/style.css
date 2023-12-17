@@ -8,37 +8,31 @@ body {
   margin: 0;
 }
 
-/* w-full flex flex-row */
-.conteiner {
-  display: flex;
-  width: 100%;
-}
 #app {
   height: 100vh;
   flex-grow: 1;
   overflow: hidden;
 }
 
-.side-content {
-  width: 24rem;
-  background-color: rgb(79 70 229);
+.menu {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.clearField {
-  display: block;
-  margin: 20px auto;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border-width: 2px;
-  background-color: #fff;
-  font-size: 1.5rem;
-  transition: 0.5s;
-
-  color: #4f46e5;
+button.menu__item {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid transparent;
+  transition: .1s;
 }
-.clearField:hover {
-  color: #ffffff;
-  background-color: #4f46e5;
-  transform: translateY(-3px);
-  border: 2px solid white;
+
+button.menu__item:hover {
+  border-color: rgba(0, 0, 0, 0.2);
 }
