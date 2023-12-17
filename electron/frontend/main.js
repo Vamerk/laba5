@@ -127,13 +127,51 @@ document.addEventListener('DOMContentLoaded', () => {
     instance.remove(event.target)
   })
 
-  const adjacencyMatrixButton = document.getElementById('adjacency matrix')
-  adjacencyMatrixButton.addEventListener('click', () => {
+  const adjacencyMatrixButton = document.getElementById('adjacency-matrix')
+  adjacencyMatrixButton.addEventListener('click', async () => {
     const jsonData = JSON.stringify({
-      data: instance.edges().map((edge) => [parseInt(edge.data('source')), parseInt(edge.data('target'))]),
-      count: instance.nodes().length
+      data: instance
+        .edges()
+        .map((edge) => [parseInt(edge.data('source')), parseInt(edge.data('target'))]),
+      count: instance.nodes().length,
     })
 
-    electron.adjacencyMatrix(jsonData)
+    const result = JSON.parse(await electron.ipcRenderer.invoke('adjacency-matrix', jsonData))
+    showTable('Матрица смежности', result)
   })
 })
+
+function showTable(title, data) {
+  const table = document.createElement('table')
+  const tableCaption = table.createCaption()
+  const tableHead = table.createTHead()
+  const tableBody = table.createTBody()
+
+  tableCaption.appendChild(document.createTextNode(title))
+
+  const headerRow = document.createElement('tr')
+  headerRow.appendChild(document.createElement('td'))
+  for (let i = 0; i < data.length; i++) {
+    const th = document.createElement('th')
+    th.appendChild(document.createTextNode(String(i)))
+    headerRow.appendChild(th)
+  }
+  tableHead.appendChild(headerRow)
+
+  for (let i = 0; i < data.length; i++) {
+    const tr = document.createElement('tr')
+    const th = document.createElement('th')
+    th.appendChild(document.createTextNode(String(i)))
+    tr.appendChild(th)
+
+    for (let j = 0; j < data[i].length; j++) {
+      const td = document.createElement('td')
+      td.appendChild(document.createTextNode(String(data[i][j])))
+      tr.appendChild(td)
+    }
+
+    tableBody.appendChild(tr)
+  }
+
+  document.getElementById('output').appendChild(table)
+}

@@ -30,9 +30,49 @@ button.menu__item {
   cursor: pointer;
   padding: 0.5rem 1rem;
   border-bottom: 1px solid transparent;
-  transition: .1s;
+  transition: 0.1s;
 }
 
 button.menu__item:hover {
   border-color: rgba(0, 0, 0, 0.2);
+}
+
+#output {
+  position: fixed;
+  max-height: 100vh;
+  top: 1rem;
+  left: 1rem;
+  padding-bottom: 2rem;
+  overflow: scroll;
+}
+
+#output::-webkit-scrollbar {
+  display: none;
+}
+
+#output .table {
+  font-size: 1.25rem;
+}
+
+#output table:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+#output table {
+  border-collapse: collapse;
+}
+
+#output table caption {
+  font-size: 0.875rem;
+}
+
+#output table th {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+#output table th,
+#output table td {
+  text-align: center;
+  min-width: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
