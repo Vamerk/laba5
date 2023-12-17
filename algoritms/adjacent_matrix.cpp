@@ -59,10 +59,9 @@ int main() {
     if (outputFile.is_open()) {
         outputFile << jsonString;
         outputFile.close();
-        std::cout << "JSON-строка успешно записана в файл 'output.json'" << std::endl;
     }
     else {
-        std::cerr << "Ошибка открытия файла для записи." << std::endl;
+
         return 1;
     }
 
