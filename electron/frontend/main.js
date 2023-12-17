@@ -89,4 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
   instance.on('tap', 'edge', (event) => {
     instance.remove(event.target)
   })
+
+  const adjacencyMatrixButton = document.getElementById('adjacency matrix')
+  adjacencyMatrixButton.addEventListener('click', () => {
+    const jsonData = JSON.stringify(
+      instance.edges().map((edge) => [edge.data('source'), edge.data('target')]),
+    )
+
+    electron.adjacencyMatrix(jsonData)
+  })
 })

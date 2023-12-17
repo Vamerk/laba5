@@ -5,7 +5,7 @@ const cppProcess = spawn('./cpp/test.exe')
 // Отправляем данные из Node.js в C++
 const inputData = 'Hello from Node.js!';
 cppProcess.stdin.write(inputData);
-cppProcess.stdin.end();  // Закрываем поток ввода, чтобы C++ программе было понятно, что данные завершены
+cppProcess.stdin.end(); 
 
 // Обрабатываем вывод C++ программы
 cppProcess.stdout.on('data', (data) => {
