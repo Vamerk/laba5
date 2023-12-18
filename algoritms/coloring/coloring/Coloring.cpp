@@ -154,11 +154,8 @@ int main() {
 
     Coloring bestSolution = geneticAlgorithm(graph, populationSize, generations, mutationRate);
 
-   
-    cout << "Best Coloring: ";
-    for (const auto& node : bestSolution) {
-        cout << "Node " << node.first << ": Color " << node.second << "   ";
-    }
+    json res = bestSolution;
+    cout << res << endl;
 
     return 0;
 }

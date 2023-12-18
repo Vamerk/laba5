@@ -90,6 +90,26 @@ async function init() {
         })
       }),
   )
+
+  ipcMain.handle(
+    'color',
+    async (event, data) =>
+      new Promise((resolve, reject) => {
+        const program = spawn(
+          'D:/Workspace/laba5/algoritms/coloring/x64/Debug/coloring.exe',
+        )
+        program.stdin.write(data)
+        program.stdin.end()
+
+        program.stdout.on('data', (data) => {
+          resolve(String(data))
+        })
+
+        program.stderr.on('data', (data) => {
+          reject(data)
+        })
+      }),
+  )
 }
 
 init().catch((error) => {

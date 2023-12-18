@@ -1,6 +1,6 @@
 import './style.css'
 import cytoscape from 'cytoscape'
-import { createTable, inputPrompt } from './utils'
+import { createTable, inputPrompt, createColors } from './utils'
 
 let counter = 0
 
@@ -140,8 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     instance.remove(event.target)
   })
 
-  const adjacencyMatrixButton = document.getElementById('adjacency-matrix')
-  adjacencyMatrixButton.addEventListener('click', async () => {
+  document.getElementById('adjacency-matrix').addEventListener('click', async () => {
     const jsonData = JSON.stringify({
       data: instance
         .edges()
@@ -153,8 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createTable('Матрица смежности', result)
   })
 
-  const incidenceMatrixButton = document.getElementById('incidence-matrix')
-  incidenceMatrixButton.addEventListener('click', async () => {
+  document.getElementById('incidence-matrix').addEventListener('click', async () => {
     const jsonData = JSON.stringify({
       data: instance
         .edges()
@@ -166,8 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createTable('Матрица инциндентности', result)
   })
 
-  const weightedMatrixButton = document.getElementById('weighted-matrix')
-  weightedMatrixButton.addEventListener('click', async () => {
+  document.getElementById('weighted-matrix').addEventListener('click', async () => {
     const edges = []
     const weights = []
 
@@ -186,5 +183,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const result = JSON.parse(await electron.ipcRenderer.invoke('weighted-matrix', jsonData))
     createTable('Весовая матрица', result)
+  })
+
+  document.getElementById('color').addEventListener('click', async () => {
+    const jsonData = JSON.stringify({
+      data: instance
+        .edges()
+        .map((edge) => [parseInt(edge.data('source')), parseInt(edge.data('target'))]),
+      count: instance.nodes().length,
+    })
+
+    const result = JSON.parse(await electron.ipcRenderer.invoke('color', jsonData))
+    console.log(result)
+    const colors = createColors(result.length)
+
+    result.forEach((e) => {
+      console.log(colors)
+      instance.nodes().getElementById(e[0]).style("background-color", colors[e[1]])
+    })
   })
 })
